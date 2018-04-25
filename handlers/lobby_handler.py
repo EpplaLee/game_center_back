@@ -47,6 +47,39 @@ class LobbyInfoHandler(BaseHandler):
             'chess_players': self.application.GameLobby.chess_players,
             'draw_players': self.application.GameLobby.draw_players,
         })
+class CreateRoomHandler(secureHandler):
+    def get(self):
+        pass
+    def post(self):
+        player = self.get_argument('player')
+        type = self.get_argument('type')
+        num = self.application.GameLobby.createRoom(player, type)
+        if num:
+            self.finish({
+                'msg': '创建成功',
+                'room_num': num,
+            })
+        else:
+            self.finish({
+                'err': '创建请求失败',
+            })
+class EnterRoomHandler(secureHandler):
+    def get(self):
+        pass
+    def post(self):
+        player = self.get_argument('player')
+        type = self.get_argument('type')
+        room_num = self.get_argument('room_num')
+        result = self.application.GameLobby.enterRoom(player, type, room_num)
+        if result:
+            self.finish({
+                'msg': '进入房间',
+            })
+        else:
+            self.finish({
+                'err': '未找到该房间',
+            })
+
 
 class GameLobby(object):
     chess_rooms = dict()
@@ -99,20 +132,21 @@ class GameLobby(object):
             }
             return draw_room_num
 
-    def enterRoom(self, room_num, type):
+    def deleteRoom(self, type, room_num):
         if type == 'chess':
             del self.chess_rooms[room_num]
         elif type == 'draw':
             del self.draw_rooms[room_num]
 
 
-    def deleteRoom(self, player, room_num, type):
+    def enterRoom(self, player, type, room_num):
         if type == 'chess':
             if player.phone_num == self.chess_rooms[room_num]:
                 del self.chess_rooms[room_num]
+                return True
         elif type == 'draw':
             if player.phone_num == self.draw_rooms[room_num]:
                 del self.draw_rooms[room_num]
-
+                return True
 
 
