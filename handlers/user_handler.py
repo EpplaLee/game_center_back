@@ -4,7 +4,7 @@ import tornado.web
 
 class BaseHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "http://192.168.0.246:3000")
+        self.set_header("Access-Control-Allow-Origin", "http://192.168.0.2:3000")
         self.set_header("Access-Control-Allow-Credentials", "true")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
