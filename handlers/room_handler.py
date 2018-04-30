@@ -26,7 +26,7 @@ class RoomWebSocket(tornado.websocket.WebSocketHandler):
             RoomWebSocket.relayGameStart(self, room_req)
     @classmethod
     def update(cls, msg):
-        for i in cls.chatroom_pool:
+        for i in cls.room_pool:
             i.write_message(msg)
 
     def relayEnterRoom(self, room_req):
@@ -52,7 +52,9 @@ class RoomWebSocket(tornado.websocket.WebSocketHandler):
         print(RoomWebSocket.room_pool)
 
         if player_list:
+            print( player_list)
             for item in player_list:
+                print('kkk')
                 RoomWebSocket.room_pool[item['phone_num']].write_message({
                     'action': 1, # 0为更新列表，1为开始游戏
                     'player_list': player_list,

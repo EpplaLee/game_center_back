@@ -13,7 +13,6 @@ class secureHandler(BaseHandler):
     def get_current_user(self):
         return self.get_secure_cookie("phone_num")
 
-
 class LoginHandler(BaseHandler):
     def get(self):
         pass
@@ -28,11 +27,30 @@ class LoginHandler(BaseHandler):
         if find_result:
             if find_result['password'] == password:
                 self.set_secure_cookie('phone_num', phone_num)
-                self.finish({ 'msg': '登录成功', "nickname": find_result['nickname'] })
+                self.finish({
+                    'msg': '登录成功',
+                    "nickname": find_result['nickname']
+                })
             else:
                 self.finish({ 'err': '用户名与密码不符'})
         else:
             self.finish({ 'err': '该帐号尚未注册'})
+class CheckLoginHandler(secureHandler):
+    def get(self):
+        user_db = self.application.db.user
+        phone_num = self.get_secure_cookie("phone_num").decode()
+        find_result = user_db.find_one({"phone_num": phone_num})
+        if phone_num:
+            self.finish({
+                'msg': '已登录',
+                'phone_num': phone_num,
+                "nickname": find_result['nickname']
+            })
+        else:
+            self.finish({
+                'err': '请登录'
+            })
+
 
 class SignupHandler(BaseHandler):
     def get(self):

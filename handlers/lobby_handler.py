@@ -26,7 +26,8 @@ class EnterGameLobbyHandler(secureHandler):
         }
         type = self.get_argument('type')
         room = self.application.GameLobby.enterLobby(player, type)
-        if room:
+        print( 'kkk', room)
+        if room != None:
             self.finish({
                 'msg': '房间信息查询成功',
                 'room': room,
@@ -65,7 +66,7 @@ class CreateRoomHandler(secureHandler):
         }
         type = self.get_argument('type')
         num = self.application.GameLobby.createRoom(player, type)
-        if num:
+        if num != None:
             self.finish({
                 'msg': '创建成功',
                 'room_num': num,
